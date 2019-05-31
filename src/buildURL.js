@@ -23,7 +23,16 @@ const buildURL = {
     if (options.categoryId) {
       baseUrl += `&categoryId=${options.categoryId}`;
     }
+    if (options.itemFilters) {
+      let i = 0;
+      Object.keys(options.itemFilters).forEach((prop) => {
+        baseUrl += `&itemFilter(${i}).name=${prop}`;
+        baseUrl += `&itemFilter(${i}).value=${options.itemFilters[prop]}`;
+        i += 1;
+      });
+    }
     baseUrl += options.limit ? `&paginationInput.entriesPerPage=${options.limit}` : '';
+    baseUrl += options.sortOrder ? `&sortOrder=${options.sortOrder}` : '';
     baseUrl += options.globalID ? `&GLOBAL-ID=${options.globalID}` : '';
     baseUrl += options.pageNumber ? `&paginationInput.pageNumber=${options.pageNumber}` : '';
     return baseUrl;
