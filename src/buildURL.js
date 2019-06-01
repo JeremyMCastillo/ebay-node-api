@@ -17,8 +17,9 @@ const buildURL = {
     baseUrl += `SECURITY-APPNAME=${options.clientID}`;
     baseUrl += `&OPERATION-NAME=${options.operationName}`;
     baseUrl += '&SERVICE-VERSION=1.0.0&RESPONSE-DATA-FORMAT=JSON';
+    baseUrl += '&outputSelector=AspectHistogram';
     if (options.keywords) {
-      baseUrl += `&keywords=${options.keywords}`;
+      baseUrl += `&keywords=${encodeURIComponent(options.keywords)}`;
     }
     if (options.categoryId) {
       baseUrl += `&categoryId=${options.categoryId}`;
@@ -31,10 +32,23 @@ const buildURL = {
         i += 1;
       });
     }
+    if (options.aspectFilters) {
+      let i = 0;
+      Object.keys(options.aspectFilters).forEach((prop) => {
+        baseUrl += `&aspectFilter(${i}).aspectName=${prop}`;
+        baseUrl += `&aspectFilter(${i}).aspectValueName=${encodeURIComponent(
+          options.aspectFilters[prop]
+        )}`;
+        i += 1;
+      });
+    }
     baseUrl += options.limit ? `&paginationInput.entriesPerPage=${options.limit}` : '';
     baseUrl += options.sortOrder ? `&sortOrder=${options.sortOrder}` : '';
     baseUrl += options.globalID ? `&GLOBAL-ID=${options.globalID}` : '';
     baseUrl += options.pageNumber ? `&paginationInput.pageNumber=${options.pageNumber}` : '';
+    baseUrl += options.affiliateID ? `&affiliate.customId=${options.affiliateID}` : '';
+
+    console.log('TCL: buildSearchUrl -> baseUrl', baseUrl);
     return baseUrl;
   },
 
