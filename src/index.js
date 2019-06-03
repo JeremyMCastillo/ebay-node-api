@@ -42,8 +42,16 @@ function Ebay(options) {
 }
 
 Ebay.prototype = {
-  findItemsAdvanced({ keywords, categoryId }) {
-    if (!keywords && !categoryId) throw new Error('Keyword or Category is missing, at least one is required');
+  findItemsAdvanced(keywords, categoryId, options) {
+    if (!keywords && !categoryId) {
+      throw new Error('Keyword or Category is missing, at least one is required');
+    }
+
+    options = options || {};
+    Object.keys(options).forEach((prop) => {
+      this.options[prop] = options[prop];
+    });
+
     this.options.operationName = 'findItemsAdvanced';
     if (keywords) {
       this.options.keywords = keywords;
